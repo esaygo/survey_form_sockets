@@ -1,0 +1,77 @@
+<html>
+<head>
+<title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script type ="text/javascript">
+        $(document).ready(function (){
+          $('#info_title').hide();
+            // this triggers the connection event in our server!
+            var socket = io.connect('http://localhost:8000');
+            // we'll write all the socket stuff after the above line!
+            $('#post_form').submit(function() {
+                var info = {
+                  name: $('#name').val(),
+                  location: $('#location').val(),
+                  language: $('#language').val(),
+                  comment: $('#comment').val()
+               }
+                socket.emit('posting_form', {
+                                              user: info,
+                                            });
+                return false;
+            });
+
+              socket.on('updated_message', function (data) {
+               var x = "<hr><p>Name:" + data.response.name + "</p>";
+               x += "<p>Location: " + data.response.location + "</p>";
+               x += "<p>Language: " + data.response.language + "</p>";
+               x += "<p>Language: " + data.response.comment + "</p><hr>";
+               $('#display').append(x);
+               var y = "<p>Your lucky number emited by the server is: " + data.random_no + "</p>";
+               $('#lucky_no').append(y);
+               $('#post_form').hide();
+               $('#info_title').show();
+            });
+        });
+    </script>
+    <style>
+    form {
+      margin: 20px;
+    }
+    form input, select:{
+      padding: 10px;
+      margin-bottom:15px;
+    }
+
+    </style>
+</head>
+
+<body>
+  <h2 id="info_title">Submitted information:</h2>
+  <div id="display"></div>
+  <div id="lucky_no"></div>
+
+  <form id="post_form">
+  <label>Name: <input id="name" type='text' name='name'></label></br>
+<label>Dojo Location:
+  <select name="locations" id="location">
+    <option value="mountain">Mountain View</option>
+    <option value="bellevue">Bellevue</option>
+    <option value="california">California</option>
+    <option value="Boston">Boston</option>
+  </select>
+</label></br>
+<label>Favorite Language:
+  <select name="languages" id="language">
+    <option value="javascript">Javascript</option>
+    <option value="php">PHP</option>
+    <option value="python">Python</option>
+  </select>
+</label></br>
+<label>Comment: <textarea id="comment" rows='4' cols='30' name='comment'></textarea></label></br>
+  <input type='submit' value='create user'>
+</form>
+</body>
+</html>
