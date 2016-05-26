@@ -20,24 +20,12 @@ app.set('views',path.join(__dirname, '/views'));
 app.set('view engine', 'ejs');
 //app.use(bodyParser.json());
 
-var route = require("./routes/index.js")(app);
-
 var server = app.listen(8000, function() {
   console.log("listening on port 8000");
 });
 //his is a new line we're adding AFTER our server listener
 // take special note how we're passing the server
 // variable. unless we have the server variable, this line will not work!!
-var io = require('socket.io').listen(server);
+//var io = require('socket.io').listen(server);
 
-// Whenever a connection event happens (the connection event is built in) run the following code
-io.sockets.on('connection', function(socket) {
-  // console.log("we are using sockets");
-  // console.log(socket.id);
-  socket.on("posting_form", function(data){
-    //console.log('info submitted ' + data.user.name);
-    socket.emit('updated_message', {
-                                    response: data.user,
-                                    random_no: Math.floor(Math.random()*1000 + 1)
-  });
-});
+var route = require("./routes/index.js")(app, server);

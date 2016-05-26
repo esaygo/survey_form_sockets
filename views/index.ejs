@@ -24,13 +24,16 @@
             });
 
               socket.on('updated_message', function (data) {
-               var x = "<hr><p>Name:" + data.response.name + "</p>";
-               x += "<p>Location: " + data.response.location + "</p>";
-               x += "<p>Language: " + data.response.language + "</p>";
-               x += "<p>Language: " + data.response.comment + "</p><hr>";
-               $('#display').append(x);
-               var y = "<p>Your lucky number emited by the server is: " + data.random_no + "</p>";
-               $('#lucky_no').append(y);
+              //  var x = "<hr><p>Name:" + data.response.name + "</p>";
+              //  x += "<p>Location: " + data.response.location + "</p>";
+              //  x += "<p>Language: " + data.response.language + "</p>";
+              //  x += "<p>Language: " + data.response.comment + "</p><hr>";
+              //  $('#display').append(x);
+              //  var y = "<p>Your lucky number emited by the server is: " + data.random_no + "</p>";
+              //  $('#lucky_no').append(y);
+              console.log(data.response);
+              $('#display').html("Your data is: " + JSON.stringify(data.response));
+              $('#lucky_no').html("Your lucky no is: " + JSON.stringify(data.random_no));
                $('#post_form').hide();
                $('#info_title').show();
             });
@@ -53,7 +56,7 @@
   <div id="display"></div>
   <div id="lucky_no"></div>
 
-  <form id="post_form">
+  <form id="post_form" action="">
   <label>Name: <input id="name" type='text' name='name'></label></br>
 <label>Dojo Location:
   <select name="locations" id="location">
