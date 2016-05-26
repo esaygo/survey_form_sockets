@@ -1,8 +1,10 @@
 
 // 1. Have the server render views/index.ejs that has the form for the user to fill out
 // 2. The user fills out the form and submits
-// 3. The submitted form gets sent to /result
-// 4. The server recognizes when someone posts things to /result, grabs information from the POST, and sends the POST data back as it renders views/results.ejs
+// 3. The form information is EMITTED to the server with the event name "posting_form"
+// 4. The server listens for an event 'posting_form' and when this event gets triggered, organizes all the emitted information to form a single message and sends this single message with the event called 'updated_message'. It also EMITs an event called 'random_number' with random number between 1-1000.
+// 5. The client listens for an event called 'random_number' and when this event gets triggered, shows the number in the HTML.
+// 6. The client listens for an event called 'updated_message' and when this event gets triggered, displays the message somewhere in the HTML
 
 var express = require('express');
 var path = require('path'); //!!!
@@ -19,10 +21,6 @@ app.set('view engine', 'ejs');
 //app.use(bodyParser.json());
 
 var route = require("./routes/index.js")(app);
-
-// this selects our port and listens
-// note that we're now storing our app.listen within
-// a variable called server. this is important!!
 
 var server = app.listen(8000, function() {
   console.log("listening on port 8000");
@@ -41,10 +39,5 @@ io.sockets.on('connection', function(socket) {
     socket.emit('updated_message', {
                                     response: data.user,
                                     random_no: Math.floor(Math.random()*1000 + 1)
-                                  });
-    //BROADCAST
-    //socket.broadcast.emit("my_broadcast_event");
-    //FULL BROADCAST
-    //io.emit("my_full_broadcast_event");
   });
 });
